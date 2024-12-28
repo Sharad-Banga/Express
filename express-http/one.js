@@ -16,7 +16,7 @@ let users = [
 
 
 ]
-app.use(express.json());//middleware
+app.use(express.json());//middleware / Access parsed JSON data from req.body
 app.get('/',(req,res)=>{
     let totalK = users[0].kidneys;
     let j = totalK.length;
