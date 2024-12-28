@@ -1,3 +1,5 @@
+// we can also use axios to fetch
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +17,8 @@
   async function call(){
     const p = await  fetch("https://jsonplaceholder.typicode.com/posts/1");
 
+    // const p = await axios.get("https://jsonplaceholder.typicode.com/posts/1");
+
     const pp = await p.json();
   const div = document.querySelector(".j");
   div.innerHTML = pp["title"];
@@ -25,3 +29,5 @@
   </script>
 </body>
 </html>
+
+
