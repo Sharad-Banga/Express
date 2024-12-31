@@ -33,8 +33,6 @@ app.post("/signup",(req,res)=>{
   })
 })
 
-
-
 app.post("/signin",(req,res)=>{
   const username = req.body.username;
   const password = req.body.password;
@@ -52,6 +50,42 @@ app.post("/signin",(req,res)=>{
 
 
 })
+
+
+app.get('/me',(req,res)=>{
+    // const t = req.header.Host;
+    const t = req.headers['token'];
+    let foundUser = null;
+    // console.log(t);
+    
+    for(let i=0; i<users.length ;i++){
+        if(users[i].token==t){
+          foundUser = users[i];
+        }
+    }
+
+    if(foundUser!=null){
+      res.json({
+        username : foundUser.username,
+        password : foundUser.password
+      })
+    }
+    else{
+      res.json({
+        message : "not foundd"
+      })
+    }
+})
+
+
+
+
+
+
+
+
+
+
 
 
 app.listen(3000);
