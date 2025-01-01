@@ -21,7 +21,7 @@ app.post("/signup",(req,res)=>{
 
   //check if user is present or not
   res.json({
-    message : "You are signed in"
+    message : "You are signed up"
   })
 
 })
