@@ -57,33 +57,15 @@ app.post("/signin",(req,res)=>{
 
 })
 
-
-
-
-
-app.get("/me",(req,res)=>{
-
+function auth(req,res,next){
   const token = req.headers.token;
 
   const decodedData = jwt.verify(token,JWT_SECRET);
 
   if(decodedData){
     
-    const foundUser = users.find((u)=>{
-      if(u.username == decodedData ){
-          return true;
-      }
-      else{
-        return false;
-      }
-    })
-    const username = foundUser.username;
-    const password = foundUser.password;
-
-    res.json({
-      username : username,
-      password : password
-    })
+    req.username = decodedData;
+    next();
 
 
   }else{
@@ -91,6 +73,30 @@ app.get("/me",(req,res)=>{
       message : "heheehehe"
     })
   }
+
+}
+
+
+
+app.get("/me",auth , (req,res)=>{
+
+  const foundUser = users.find((u)=>{
+    if(u.username == req.username ){
+        return true;
+    }
+    else{
+      return false;
+    }
+  })
+  const username = foundUser.username;
+  const password = foundUser.password;
+
+  res.json({
+    username : username,
+    password : password
+  })
+
+  
   
 
 
