@@ -48,7 +48,8 @@ app.post("/signin",(req,res)=>{
   }
   else{
     
-    const token = jwt.sign(foundUser.username ,JWT_SECRET);
+    const token = jwt.sign({ username: foundUser.username }, JWT_SECRET);
+
     res.json({
       token : token
     })
@@ -62,11 +63,10 @@ function auth(req,res,next){
 
   const decodedData = jwt.verify(token,JWT_SECRET);
 
-  if(decodedData){
+  if(decodedData.username){
     
-    req.username = decodedData;
+    req.username = decodedData.username;
     next();
-
 
   }else{
     res.json({
@@ -75,6 +75,10 @@ function auth(req,res,next){
   }
 
 }
+
+app.get("/",(req,res)=>{
+  res.sendFile(__dirname+"/public/index.html");
+})
 
 
 

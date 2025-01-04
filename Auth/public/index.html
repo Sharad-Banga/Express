@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Website</title>
+
+  <style>
+    /* General Reset */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* Container Styles */
+div {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 400px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="password"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Headings */
+h1, h2 {
+  margin: 0 0 10px;
+  color: #444;
+}
+
+/* User Information Section */
+#information {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+  div {
+    max-width: 90%;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    font-size: 14px;
+  }
+}
+
+  </style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+
+<script>
+
+async function signup() {
+    const username = document.getElementById("signup-username").value;
+    const password = document.getElementById("signup-password").value;
+    console.log("sssss");
+    
+    const response = await axios.post("http://localhost:3000/signup", {
+        username: username,
+        password: password
+    })
+    alert("Signed up successfully");
+}
+
+async function signin() {
+    const username = document.getElementById("signin-username").value;
+    const password = document.getElementById("signin-password").value;
+
+    const response = await axios.post("http://localhost:3000/signin", {
+        username: username,
+        password: password
+    });
+
+    localStorage.setItem("token", response.data.token);
+
+    if(response.data.token){
+        alert("Signed in successfully");
+
+    }else{
+      alert("wrong");
+    }
+    
+    getUserInformation();
+}
+
+async function getUserInformation(){
+    const response = await axios.get("http://localhost:3000/me",{
+      headers : {
+        token : localStorage.getItem("token")
+      }
+    })
+    document.getElementById("information").innerHTML = "Username : "+ response.data.username + " Password "+response.data.password;
+}
+
+
+</script>
+
+
+<body>
+  
+  <div>
+    Signup
+    <input id="signup-username" type="text" name="username" placeholder="Username">
+    <input id="signup-password" type="password" name="password" placeholder="Password">
+    <button onclick="signup()">Submit</button>
+  </div>
+
+  <div>
+    Signin
+    <input id="signin-username" type="text" name="username" placeholder="Username">
+    <input id="signin-password" type="password" name="password" placeholder="Password">
+    <button onclick="signin()">Submit</button>
+  </div>
+
+  <div>
+    User information: 
+    <div id="information"></div>
+  </div>
+
+  <div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+
+</body>
+</html>
